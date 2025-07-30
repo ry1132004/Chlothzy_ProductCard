@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Product Card</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 2rem;
+      background: #f3f3f3;
+    }
+    .product-card {
+      display: grid;
+      grid-template-areas:
+        "image"
+        "name"
+        "price"
+        "swatches";
+      gap: 1rem;
+      width: 300px;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product-image {
+      grid-area: image;
+      width: 100%;
+    }
+    .product-name {
+      grid-area: name;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .product-price {
+      grid-area: price;
+      font-size: 1.1rem;
+      color: #444;
+    }
+    .swatches {
+      grid-area: swatches;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      outline: none;
+    }
+    .swatch[aria-checked="true"] {
+      border: 3px solid black;
+    }
+  </style>
+</head>
+<body style="background-color: rgb(191, 204, 204);">
+
+  <section class="product-card">
+    <img src="" alt="Product Image" class="product-image" id="productImage" />
+    <div class="product-name" id="productName">Blazer</div>
+    <div class="product-price" id="productPrice"></div>
+    <div class="swatches" role="radiogroup" aria-label="Color options"></div>
+  </section>
+
+  <section style="margin-top: 2rem; padding: 1rem; background-color: #f9f9f9; border-top: 1px solid #ccc; border-radius: 20px;">
+    <h2>Technical Explanation</h2>
+    <h3>1. Overall Approach & Goal</h3>
+    <p>The product card allows users to switch between shirt colors and see the corresponding image and price updates. It emphasizes accessibility, responsiveness, and clarity.</p>
+    <h3>2. HTML Structure</h3>
+    <ul>
+      <li>&lt;section&gt; for the product card</li>
+      <li>&lt;img&gt; for the product image</li>
+      <li>&lt;div&gt; for name and price</li>
+      <li>&lt;button&gt; swatches with ARIA roles</li>
+    </ul>
+    <h3>3. CSS Styling & Responsiveness</h3>
+    <p>CSS Grid is used for layout. Swatches are round and visually distinct with active borders.</p>
+    <h3>4. JavaScript Functionality</h3>
+    <p>Swatches are dynamically rendered and handle product updates and ARIA state changes on click.</p>
+    <h3>5. Accessibility Considerations</h3>
+    <ul>
+      <li>Uses ARIA roles and aria-checked states</li>
+      <li>Keyboard accessible buttons</li>
+      <li>Descriptive image alt attributes</li>
+    </ul>
+  </section>
+
+  <script>
+    const productData = [
+      {
+        color: "Red",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREA7v1zOoAZywNHbNAypkTTckdB6nIhGGccw&s",
+        price: "₹ 999"
+      },
+      {
+        color: "Blue",
+        image: "data:image/jpeg;base64,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",
+        price: "₹ 1049"
+      },
+      {
+        color: "Green",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKciZVKeVu2F57HYN-4VWvANPGvWpP38wCRQ&s",
+        price: "₹ 1099"
+      }
+    ];
+    const swatchesContainer = document.querySelector(".swatches");
+    const imageEl = document.getElementById("productImage");
+    const priceEl = document.getElementById("productPrice");
+
+    function loadProduct(index) {
+      const product = productData[index];
+      imageEl.src = product.image;
+      imageEl.alt = `${product.color} Shirt`;
+      priceEl.textContent = product.price;
+      document.querySelectorAll(".swatch").forEach((swatch, i) => {
+        swatch.setAttribute("aria-checked", i === index ? "true" : "false");
+      });
+    }
+
+    productData.forEach((product, index) => {
+      const swatch = document.createElement("button");
+      swatch.className = "swatch";
+      swatch.setAttribute("role", "radio");
+      swatch.setAttribute("aria-label", product.color);
+      swatch.setAttribute("aria-checked", "false");
+      swatch.style.backgroundColor = product.color.toLowerCase();
+      swatch.addEventListener("click", () => loadProduct(index));
+      swatchesContainer.appendChild(swatch);
+    });
+
+    loadProduct(0);
+  </script>
+</body>
+</html>
